@@ -52,7 +52,7 @@ async function updateChannelPost(ctx, settings) {
         settings.channelMessageId,
         null,
         caption,
-        { ...keyboard, parse_mode: 'HTML' }
+        { reply_markup: keyboard.reply_markup, parse_mode: 'HTML' }
       );
     } else if (settings.channelMessageId) {
       await ctx.telegram.editMessageText(
@@ -60,7 +60,7 @@ async function updateChannelPost(ctx, settings) {
         settings.channelMessageId,
         null,
         caption,
-        { ...keyboard, parse_mode: 'HTML' }
+        { reply_markup: keyboard.reply_markup, parse_mode: 'HTML' }
       );
     }
   } catch (e) {
@@ -433,7 +433,7 @@ bot.on('message', async (ctx) => {
 
       const sent = await ctx.telegram.sendPhoto(CHANNEL_ID, photo, {
         caption: fullCaption,
-        ...keyboard
+        reply_markup: keyboard.reply_markup
       });
 
       settings.channelMessageId = sent.message_id;
@@ -454,7 +454,9 @@ bot.on('message', async (ctx) => {
         [Markup.button.callback(`🎮 Qatnashish (${count}/${settings.maxParticipants})`, 'join_turnir')]
       ]);
 
-      const sent = await ctx.telegram.sendMessage(CHANNEL_ID, fullText, keyboard);
+      const sent = await ctx.telegram.sendMessage(CHANNEL_ID, fullText, {
+        reply_markup: keyboard.reply_markup
+      });
 
       settings.channelMessageId = sent.message_id;
       settings.currentText = text;
